@@ -1,0 +1,103 @@
+
+        File iPath = Environment.getDataDirectory();
+        StatFs iStat = new StatFs(iPath.getPath());
+        long iBlockSize = iStat.getBlockSizeLong();
+        long iAvailableBlocks = iStat.getFreeBlocksLong();
+        long iTotalBlocks = iStat.getBlockCountLong();
+        long sizee = iTotalBlocks - iAvailableBlocks;
+        String iAvailableSpace = formatSize(iAvailableBlocks * iBlockSize);
+        String iTotalSpace = formatSize(iTotalBlocks * iBlockSize);
+        final float totalSpace = DeviceMemory.getInternalStorageSpace();
+        final float occupiedSpace = DeviceMemory.getInternalUsedSpace();
+        final float freeSpace = DeviceMemory.getInternalFreeSpace();
+
+
+        System.out.println("****** AVA : " + iAvailableSpace + " * TOT : " + iTotalSpace);
+        System.out.println("****** AVA Totl : " + totalSpace + " * TOT : " + occupiedSpace);
+        System.out.println("****** AVA BYR : " + bytes2String(iAvailableBlocks * iBlockSize) + " * TOT : " + bytes2String(iTotalBlocks * iBlockSize)+ " * TOT : " + bytes2String(sizee* iBlockSize));
+        System.out.println("****** AVA Free : " + freeSpace);
+
+
+
+*************************
+
+  private static double SPACE_KB = 1024;
+    private static double SPACE_MB = 1024 * SPACE_KB;
+    private static double SPACE_GB = 1024 * SPACE_MB;
+    private static double SPACE_TB = 1024 * SPACE_GB;
+
+    public static String bytes2String(long sizeInBytes) {
+
+        NumberFormat nf = new DecimalFormat();
+        nf.setMaximumFractionDigits(2);
+
+        try {
+            if (sizeInBytes < SPACE_KB) {
+                return nf.format(sizeInBytes) + " Byte(s)";
+            } else if (sizeInBytes < SPACE_MB) {
+                return nf.format(sizeInBytes / SPACE_KB) + " KB";
+            } else if (sizeInBytes < SPACE_GB) {
+                return nf.format(sizeInBytes / SPACE_MB) + " MB";
+            } else if (sizeInBytes < SPACE_TB) {
+                return nf.format(sizeInBytes / SPACE_GB) + " GB";
+            } else {
+                return nf.format(sizeInBytes / SPACE_TB) + " TB";
+            }
+        } catch (Exception e) {
+            return sizeInBytes + " Byte(s)";
+        }
+
+    }
+
+
+
+*************************
+
+    public static String formatSize(long size) {
+        String suffix = null;
+
+        if (size >= 1024) {
+//            suffix = "KB";
+            size /= 1024;
+            if (size >= 1024) {
+//                suffix = "MB";
+                size /= 1024;
+            }
+        }
+
+        StringBuilder resultBuffer = new StringBuilder(Long.toString(size));
+
+        int commaOffset = resultBuffer.length() - 3;
+        while (commaOffset > 0) {
+            resultBuffer.insert(commaOffset, ',');
+            commaOffset -= 3;
+        }
+
+        if (suffix != null) resultBuffer.append(suffix);
+        return resultBuffer.toString();
+    }
+
+
+***************
+
+     Intent intent = new Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS);
+        startActivity(intent);
+
+***************
+
+ Intent intent = new Intent(Settings.EXTRA_BATTERY_SAVER_MODE_ENABLED);
+        startActivity(intent);
+
+***************
+
+        Intent intent = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+        startActivity(intent);
+
+***************
+
+        Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+        startActivity(intent);
+
+
+***************
+
